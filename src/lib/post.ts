@@ -1,11 +1,10 @@
 import fs from 'fs';
 import { sync } from 'glob';
 import matter from 'gray-matter';
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
 
-const BASE_PATH = '/src/posts';
+// const BASE_PATH = '/src/posts';
+const BASE_PATH = 'src/posts';
 const POSTS_PATH = path.join(process.cwd(), BASE_PATH);
 
 interface PostMatter {
@@ -25,6 +24,7 @@ export interface Post extends PostMatter {
 // target folder의 모든 mdx 파일 조회
 const getPostPaths = () => {
   const postPaths: string[] = sync(`${POSTS_PATH}/**/*.mdx`);
+
   return postPaths;
 };
 
@@ -39,8 +39,12 @@ const parsePost = async (postPath: string): Promise<Post> => {
 };
 
 const parsePostAbstract = (postPath: string) => {
+  // const filePath = postPath
+  //   .slice(postPath.indexOf(BASE_PATH))
+  //   .replace(`${BASE_PATH}/`, '')
+  //   .replace('.mdx', '');
   const filePath = postPath
-    .slice(postPath.indexOf(BASE_PATH))
+    .replace(/\\/g, '/')
     .replace(`${BASE_PATH}/`, '')
     .replace('.mdx', '');
 

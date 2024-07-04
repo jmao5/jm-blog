@@ -4,7 +4,6 @@ import { getPostList } from '@/lib/post';
 
 const Blog = async () => {
   const postList = await getPostList();
-  console.log('postList :', postList);
 
   return (
     <section className='w-[1000px] mx-auto'>

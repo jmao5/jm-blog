@@ -5,7 +5,7 @@ export const Header = () => {
     <nav className='flex justify-center h-[60px] items-center'>
       <div className='w-full max-w-[1200px] flex justify-between px-4'>
         <div>
-          <Link href='/blog'>D5BL5G</Link>
+          <Link href='/blog'>Jmlog</Link>
         </div>
         <div>right</div>
       </div>
