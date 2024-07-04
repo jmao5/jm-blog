@@ -22,7 +22,7 @@
     "react-dom": "^18",
     "rehype-pretty-code": "^0.13.2",
     "remark-toc": "^9.0.0",
-    "shikiji": "^0.10.2",
+    "shiki": "^0.10.2",
     "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
