@@ -21,11 +21,7 @@ export interface Post extends PostMatter {
 }
 
 // target folder의 모든 mdx 파일 조회
-const getPostPaths = () => {
-  const postPaths: string[] = sync(`${POSTS_PATH}/**/*.mdx`);
-
-  return postPaths;
-};
+const getPostPaths = (): string[] => sync(`${POSTS_PATH}/**/*.mdx`);
 
 // mdx 파일 parsing
 const parsePost = async (postPath: string): Promise<Post> => {
@@ -47,13 +43,10 @@ const parsePostAbstract = (postPath: string) => {
 
   const [categoryPath, slug] = filePath.split('/');
 
-  const url = `blog/${categoryPath}/${slug}`;
-  const categoryPublicName = getCategoryPublicName(categoryPath);
-
   return {
-    url,
+    url: `blog/${categoryPath}/${slug}`,
     categoryPath,
-    categoryPublicName,
+    categoryPublicName: getCategoryPublicName(categoryPath),
     slug,
   };
 };
@@ -61,48 +54,35 @@ const parsePostAbstract = (postPath: string) => {
 const parsePostDetail = async (postPath: string) => {
   const file = fs.readFileSync(postPath, 'utf8');
   const { data, content } = matter(file);
-  const grayMatter = data as PostMatter;
-
-  return { ...grayMatter, content };
+  return { ...(data as PostMatter), content };
 };
 
-const getCategoryPublicName = (dirPath: string) =>
+const getCategoryPublicName = (dirPath: string): string =>
   dirPath
     .split('_')
-    .map((token) => token[0].toUpperCase() + token.slice(1, token.length))
+    .map((token) => token[0].toUpperCase() + token.slice(1))
     .join(' ');
 
-const sortPostList = (PostList: Post[]) => {
-  return PostList.sort((a: Post, b: Post) => {
-    const dateA = a.date;
-    const dateB = b.date;
-
-    if (dateA > dateB) return -1;
-    if (dateA < dateB) return 1;
-    return 0;
-  });
-};
+const sortPostList = (postList: Post[]): Post[] =>
+  postList.sort((a, b) => b.date.getTime() - a.date.getTime());
 
 export const getPostList = async (): Promise<Post[]> => {
-  const postPaths: string[] = getPostPaths();
-
-  const result = await Promise.all(
-    postPaths.map((postPath) => parsePost(postPath))
-  );
-
+  const postPaths = getPostPaths();
+  const result = await Promise.all(postPaths.map(parsePost));
   return sortPostList(result);
 };
 
-export const getPostParamList = () => {
-  const postPaths: string[] = getPostPaths();
-  const abstractList = postPaths
-    .map((path) => parsePostAbstract(path))
-    .map((item) => ({ category: item.categoryPath, slug: item.slug }));
-  return abstractList;
+export const getPostParamList = (): { category: string; slug: string }[] => {
+  const postPaths = getPostPaths();
+  return postPaths
+    .map(parsePostAbstract)
+    .map(({ categoryPath, slug }) => ({ category: categoryPath, slug }));
 };
 
-export const getPostDetail = async (category: string, slug: string) => {
+export const getPostDetail = async (
+  category: string,
+  slug: string
+): Promise<Post> => {
   const filePath = `${POSTS_PATH}/${category}/${slug}.mdx`;
-  const detail = await parsePost(filePath);
-  return detail;
+  return parsePost(filePath);
 };
