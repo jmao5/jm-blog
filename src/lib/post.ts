@@ -3,8 +3,7 @@ import { sync } from 'glob';
 import matter from 'gray-matter';
 import path from 'path';
 
-// const BASE_PATH = '/src/posts';
-const BASE_PATH = 'src/posts';
+const BASE_PATH = '/src/posts';
 const POSTS_PATH = path.join(process.cwd(), BASE_PATH);
 
 interface PostMatter {
@@ -39,13 +38,11 @@ const parsePost = async (postPath: string): Promise<Post> => {
 };
 
 const parsePostAbstract = (postPath: string) => {
-  // const filePath = postPath
-  //   .slice(postPath.indexOf(BASE_PATH))
-  //   .replace(`${BASE_PATH}/`, '')
-  //   .replace('.mdx', '');
+  const normalizedBasePath = BASE_PATH.replace(/^\//, '');
   const filePath = postPath
     .replace(/\\/g, '/')
-    .replace(`${BASE_PATH}/`, '')
+    .slice(postPath.replace(/\\/g, '/').indexOf(normalizedBasePath))
+    .replace(`${normalizedBasePath}/`, '')
     .replace('.mdx', '');
 
   const [categoryPath, slug] = filePath.split('/');
