@@ -5,6 +5,7 @@ import '@/config/globals.css';
 import { Footer } from '@/layouts/Footer';
 import { Header } from '@/layouts/Header';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from 'next-themes';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,11 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ko' className='h-full'>
+    <html lang='ko' className='h-full' suppressHydrationWarning>
       <body className={cn(inter.className, 'min-h-screen flex flex-col')}>
-        <Header />
-        <main className='flex flex-1 flex-col'>{children}</main>
-        <Footer />
+        <ThemeProvider>
+          <Header />
+          <main className='flex flex-1 flex-col'>{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

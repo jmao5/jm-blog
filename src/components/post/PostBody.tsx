@@ -29,7 +29,7 @@ export const PostBody = ({ children }: Props) => {
             remarkBreaks,
           ],
           // 함께 작동하여 ID를 추가하고 제목을 연결합니다.
-          rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypePrettyCode],
+          rehypePlugins: [rehypePrettyCode, rehypeSlug, rehypeAutolinkHeadings],
         },
       }}
       components={MdxComponents}
