@@ -13,6 +13,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        pretendard: ['Pretendard'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -62,8 +65,16 @@ const config = {
             'h2, h3, h4': {
               scrollMarginTop: '5rem',
             },
+            p: {
+              marginTop: '2rem',
+              marginBottom: '2rem',
+            },
             '.callout-contents > p': {
               margin: 0,
+            },
+
+            code: {
+              counterReset: 'line',
             },
 
             // Inline code only
@@ -88,6 +99,27 @@ const config = {
               content: 'none',
             },
 
+            'code[data-line-numbers] > [data-line]::before': {
+              counterIncrement: 'line',
+              content: 'counter(line)',
+
+              /* Other styling */
+              display: 'inline-block',
+              width: '1rem',
+              marginRight: '1.4rem',
+              textAlign: 'right',
+              color: 'lightgrey',
+              fontSize: '0.75rem',
+            },
+
+            'code[data-line-numbers-max-digits="2"] > [data-line]::before': {
+              width: '1rem',
+            },
+
+            'code[data-line-numbers-max-digits="3"] > [data-line]::before': {
+              width: '2rem',
+            },
+
             pre: {
               paddingRight: 0,
               paddingLeft: 0,
@@ -103,7 +135,7 @@ const config = {
             },
 
             'pre > code > span': {
-              paddingLeft: '1rem',
+              paddingLeft: '1.1rem',
               paddingRight: '1rem',
             },
 

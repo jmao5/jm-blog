@@ -23,11 +23,11 @@ export const Header = () => {
         </div>
         <div className='flex gap-3'>
           <ThemeSwitch />
-          <Button asChild variant='ghost' size='icon'>
-            <Link href='https://github.com/d5br5' target='_blank'>
+          {/* <Button asChild variant='ghost' size='icon'>
+            <Link href='https://github.com/jmao5' target='_blank'>
               <Github className='size-[1.2rem]' />
             </Link>
-          </Button>
+          </Button> */}
         </div>
       </div>
       <ScrollProgressBar />
