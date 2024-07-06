@@ -1,3 +1,4 @@
+import { CategoryDetail, HeadingItem, Post, PostMatter } from '@/config/types';
 import dayjs from 'dayjs';
 import fs from 'fs';
 import { sync } from 'glob';
@@ -7,22 +8,6 @@ import readingTime from 'reading-time';
 
 const BASE_PATH = '/src/posts';
 const POSTS_PATH = path.join(process.cwd(), BASE_PATH);
-
-interface PostMatter {
-  title: string;
-  date: Date;
-  dateString: string;
-  thumbnail: string;
-}
-
-export interface Post extends PostMatter {
-  url: string;
-  slug: string;
-  categoryPath: string;
-  content: string;
-  readingMinutes: number;
-  categoryPublicName: string;
-}
 
 // 모든 MDX 파일 조회
 export const getPostPaths = (category?: string) => {
@@ -98,6 +83,16 @@ export const getSortedPostList = async (category?: string) => {
   return sortPostList(postList);
 };
 
+export const getSitemapPostList = async () => {
+  const postList = await getPostList();
+  const baseUrl = 'https://jmlog.vercel.app';
+  const sitemapPostList = postList.map(({ url }) => ({
+    lastModified: new Date(),
+    url: `${baseUrl}${url}`,
+  }));
+  return sitemapPostList;
+};
+
 export const getAllPostCount = async () => (await getPostList()).length;
 
 export const getCategoryList = () => {
@@ -105,12 +100,6 @@ export const getCategoryList = () => {
   const cgList = cgPaths.map((path) => path.replace(/\\/g, '/').split('/').slice(-1)?.[0]);
   return cgList;
 };
-
-export interface CategoryDetail {
-  dirName: string;
-  publicName: string;
-  count: number;
-}
 
 export const getCategoryDetailList = async () => {
   const postList = await getPostList();
@@ -137,4 +126,24 @@ export const getPostDetail = async (category: string, slug: string) => {
   const filePath = `${POSTS_PATH}/${category}/${slug}/content.mdx`;
   const detail = await parsePost(filePath);
   return detail;
+};
+
+export const parseToc = (content: string): HeadingItem[] => {
+  const regex = /^(##|###) (.*$)/gim;
+  const headingList = content.match(regex);
+  return (
+    headingList?.map((heading: string) => ({
+      text: heading.replace('##', '').replace('#', ''),
+      link:
+        '#' +
+        heading
+          .replace('# ', '')
+          .replace('#', '')
+          .replace(/[\[\]:!@#$%^&*()+=]/g, '')
+          .replace(/ /g, '-')
+          .toLowerCase()
+          .replace('?', ''),
+      indent: (heading.match(/#/g)?.length || 2) - 2,
+    })) || []
+  );
 };

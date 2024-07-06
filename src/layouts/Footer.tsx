@@ -1,6 +1,6 @@
 export const Footer = () => {
   return (
-    <footer className='h-[100px] flex justify-center items-center'>
+    <footer className='flex h-[100px] items-center justify-center'>
       © 2024 SangHyeon Jeon all rights reserved
     </footer>
   );
