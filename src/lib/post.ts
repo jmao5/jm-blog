@@ -115,7 +115,7 @@ export const getCategoryParamList = () => {
 
 export const getCategoryList = () => {
   const cgPaths: string[] = sync(`${POSTS_PATH}/*`);
-  const cgList = cgPaths.map((path) => path.split('/').slice(-1)?.[0]);
+  const cgList = cgPaths.map((path) => path.replace(/\\/g, '/').split('/').slice(-1)?.[0]);
   return cgList;
 };
 
