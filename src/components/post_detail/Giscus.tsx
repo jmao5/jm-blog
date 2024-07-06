@@ -19,10 +19,10 @@ export default function Giscus() {
     scriptElem.async = true;
     scriptElem.crossOrigin = 'anonymous';
 
-    scriptElem.setAttribute('data-repo', 'd5br5/d5br5.blog');
-    scriptElem.setAttribute('data-repo-id', 'R_kgDOLJ1aMw');
-    scriptElem.setAttribute('data-category', 'Comments');
-    scriptElem.setAttribute('data-category-id', 'DIC_kwDOLJ1aM84CdGpy');
+    scriptElem.setAttribute('data-repo', 'jmao5/jmlog');
+    scriptElem.setAttribute('data-repo-id', 'R_kgDOMN1bgw');
+    scriptElem.setAttribute('data-category', 'Announcements');
+    scriptElem.setAttribute('data-category-id', 'DIC_kwDOMN1bg84Cgm_G');
     scriptElem.setAttribute('data-mapping', 'pathname');
     scriptElem.setAttribute('data-strict', '0');
     scriptElem.setAttribute('data-reactions-enabled', '1');
