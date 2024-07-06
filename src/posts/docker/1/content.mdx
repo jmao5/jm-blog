@@ -1,0 +1,44 @@
+---
+title: 오라클 Linux 1. Docker 설치
+date: 2023-08-03
+tags: ['oracle linux', 'docker']
+---
+
+## 도커(Docker)
+
+도커(Docker)는 컨테이너라 부르는 가상 머신과 유사한 격리된 공간을 제공하여 여러 프로그램들의 관리를 간략화시켜주는 응용프로그램입니다.
+
+<Callout type='info'>
+  Docker는 애플리케이션을 신속하게 배포하고 관리할 수 있는 강력한 도구입니다.
+</Callout>
+
+## 설치
+
+[ORACLE-BASE - Docker : Install Docker on Oracle Linux 8 (OL8)](https://oracle-base.com/articles/linux/docker-install-docker-on-oracle-linux-ol8)
+
+이 문서는 Oracle Linux 8 (OL8)에 Docker를 설치하는 방법을 설명합니다.
+
+Oracle Linux는 Red Hat Enterprise Linux(이하 RHEL)의 주요 버전에 대응하는 릴리즈를 제공한다. 오라클 리눅스 8 버전 Docker 가이드를 참고하여 진행합니다.
+
+<Callout type='warn'>
+  필요한 모든 저장소를 사용하도록 설정합니다. `sudo -i` 명령어로 root 계정에 접근 후
+</Callout>
+
+```bash
+dnf install -y dnf-utils zip unzip
+dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+```
+
+도커를 설치합니다.
+
+```bash
+dnf remove -y runc
+dnf install -y docker-ce --nobest
+```
+
+Docker 서비스를 사용하도록 설정하고 시작합니다.
+
+```bash
+systemctl enable docker.service
+systemctl start docker.service
+```
