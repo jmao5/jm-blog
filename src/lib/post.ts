@@ -2,6 +2,7 @@ import fs from 'fs';
 import { sync } from 'glob';
 import matter from 'gray-matter';
 import path from 'path';
+import readingTime from 'reading-time';
 
 const BASE_PATH = '/src/posts';
 const POSTS_PATH = path.join(process.cwd(), BASE_PATH);
@@ -18,10 +19,14 @@ export interface Post extends PostMatter {
   categoryPath: string;
   categoryPublicName: string;
   content: string;
+  readingMinutes: number;
 }
 
 // target folder의 모든 mdx 파일 조회
-const getPostPaths = (): string[] => sync(`${POSTS_PATH}/**/*.mdx`);
+const getPostPaths = () => {
+  const postPaths: string[] = sync(`${POSTS_PATH}/**/*.mdx`);
+  return postPaths;
+};
 
 // mdx 파일 parsing
 const parsePost = async (postPath: string): Promise<Post> => {
@@ -43,10 +48,13 @@ const parsePostAbstract = (postPath: string) => {
 
   const [categoryPath, slug] = filePath.split('/');
 
+  const url = `blog/${categoryPath}/${slug}`;
+  const categoryPublicName = getCategoryPublicName(categoryPath);
+
   return {
-    url: `blog/${categoryPath}/${slug}`,
+    url,
     categoryPath,
-    categoryPublicName: getCategoryPublicName(categoryPath),
+    categoryPublicName,
     slug,
   };
 };
@@ -54,35 +62,47 @@ const parsePostAbstract = (postPath: string) => {
 const parsePostDetail = async (postPath: string) => {
   const file = fs.readFileSync(postPath, 'utf8');
   const { data, content } = matter(file);
-  return { ...(data as PostMatter), content };
+  const grayMatter = data as PostMatter;
+  const readingMinutes = Math.ceil(readingTime(content).minutes);
+
+  return { ...grayMatter, content, readingMinutes };
 };
 
-const getCategoryPublicName = (dirPath: string): string =>
+const getCategoryPublicName = (dirPath: string) =>
   dirPath
     .split('_')
-    .map((token) => token[0].toUpperCase() + token.slice(1))
+    .map((token) => token[0].toUpperCase() + token.slice(1, token.length))
     .join(' ');
 
-const sortPostList = (postList: Post[]): Post[] =>
-  postList.sort((a, b) => b.date.getTime() - a.date.getTime());
+const sortPostList = (PostList: Post[]) => {
+  return PostList.sort((a: Post, b: Post) => {
+    const dateA = a.date;
+    const dateB = b.date;
+
+    if (dateA > dateB) return -1;
+    if (dateA < dateB) return 1;
+    return 0;
+  });
+};
 
 export const getPostList = async (): Promise<Post[]> => {
-  const postPaths = getPostPaths();
-  const result = await Promise.all(postPaths.map(parsePost));
+  const postPaths: string[] = getPostPaths();
+
+  const result = await Promise.all(postPaths.map((postPath) => parsePost(postPath)));
+
   return sortPostList(result);
 };
 
-export const getPostParamList = (): { category: string; slug: string }[] => {
-  const postPaths = getPostPaths();
-  return postPaths
-    .map(parsePostAbstract)
-    .map(({ categoryPath, slug }) => ({ category: categoryPath, slug }));
+export const getPostParamList = () => {
+  const postPaths: string[] = getPostPaths();
+  const abstractList = postPaths
+    .map((path) => parsePostAbstract(path))
+    .map((item) => ({ category: item.categoryPath, slug: item.slug }));
+  return abstractList;
 };
 
-export const getPostDetail = async (
-  category: string,
-  slug: string
-): Promise<Post> => {
-  const filePath = `${POSTS_PATH}/${category}/${slug}.mdx`;
-  return parsePost(filePath);
+export const getPostDetail = async (category: string, slug: string) => {
+  const filePath = `${POSTS_PATH}/${category}/${slug}/content.mdx`;
+  const detail = await parsePost(filePath);
+  return detail;
 };

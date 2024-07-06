@@ -1,13 +1,13 @@
 import Link from 'next/link';
 
-import ThemeSwitch from './ThemeChanger';
+import ThemeSwitch from '@/layouts/theme/Switch';
 
 export const Header = () => {
   return (
-    <nav className='flex justify-center h-[60px] items-center'>
+    <nav className='flex justify-center h-[64px] items-center sticky top-0 pt-1'>
       <div className='w-full max-w-[1200px] flex justify-between px-4'>
-        <div>
-          <Link href='/blog'>Jmlog</Link>
+        <div className='flex items-center'>
+          <Link href='/blog'>JMLOG</Link>
         </div>
         <div>
           <ThemeSwitch />
