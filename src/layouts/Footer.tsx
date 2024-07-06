@@ -22,6 +22,12 @@ export const Footer = () => {
           />
         </Link> */}
       </div>
+      <a href='https://hits.sh/jmlog.vercel.app/blog/'>
+        <img
+          alt='Hits'
+          src='https://hits.sh/jmlog.vercel.app/blog.svg?view=today-total&label=visitors'
+        />
+      </a>
       <div>
         © 2024. <span className='font-semibold'>SangHyeon Jeon</span> all rights reserved.
       </div>
