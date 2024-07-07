@@ -1,0 +1,38 @@
+---
+title: 오라클 Linux 2. Portainer 설치
+date: 2023-08-10
+thumbnail: /posts/docker/thumbnail.png
+---
+
+## 포테이너(Portainer)
+
+Portainer(이하, 포테이너)는 도커를 웹으로 관리할 수 있는 도구입니다. 서버 또는 가상 머신에 SSH로 접속하여 Docker 명령을 칠 필요 없이, 웹 UI로 도커를 운영할 수 있습니다.
+
+### 사전작업
+
+포테이너는 TCP 8000번, TCP 9000번 포트를 사용합니다. 오라클 클라우드 네트워크 규칙에 8000, 9000번을 추가합니다.
+
+### 포테이너 설치
+
+포테이너 데이터를 담아둘 볼륨을 설정합니다.
+
+```bash
+sudo docker volume create portainer_data
+```
+
+포테이너 이미지를 내려받고 실행합니다.
+
+```bash
+sudo docker run -d \
+     -p 8000:8000 \
+     -p 9000:9000 \
+     --name=portainer \
+     --restart=always \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v portainer_data:/data \
+     portainer/portainer-ce
+```
+
+### 포테이너 초기 설정
+
+본인 IP:9000 접속하여 초기 관리자 비밀번호를 입력해 줍니다.
