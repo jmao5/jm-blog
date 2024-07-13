@@ -2,7 +2,7 @@
 import { Suspense } from 'react';
 
 import CategoryList from './CategoryList';
-import ClientPostList from './ClientPostList';
+import PostListClient from './PostListClient';
 import { getAllPostCount, getCategoryDetailList, getSortedPostList } from '@/lib/post';
 
 interface PostListProps {
@@ -22,7 +22,7 @@ const PostListPage = async ({ category }: PostListProps) => {
         currentCategory={category}
       />
       <Suspense fallback={<div>Loading...</div>}>
-        <ClientPostList postList={postList} />
+        <PostListClient initialPostList={postList} />
       </Suspense>
     </section>
   );

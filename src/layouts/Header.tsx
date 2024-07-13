@@ -1,12 +1,36 @@
+// layouts/Header.tsx
 'use client';
 
 import Link from 'next/link';
 
 import ScrollProgressBar from '@/components/common/ScrollProgressBar';
-import { Button } from '@/components/ui/button';
+import SearchBar from '@/components/common/SearchBar';
 import { useSpyElem } from '@/hook/useSpy';
 import ThemeSwitch from '@/layouts/theme/Switch';
-import { Github } from 'lucide-react';
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
+
+// layouts/Header.tsx
 
 export const Header = () => {
   const { ref, marginTop } = useSpyElem(65);
@@ -17,17 +41,13 @@ export const Header = () => {
       ref={ref}
       className='fixed z-40 flex w-full flex-col items-center justify-center border-b bg-background shadow-sm'
     >
-      <div className='mt-1 flex h-[64px] w-full max-w-[1200px] items-center justify-between px-4'>
+      <div className='mt-1 flex h-[52px] w-full max-w-[1200px] items-center justify-between px-4 lg:h-[64px]'>
         <div className='flex items-center text-lg font-medium'>
           <Link href='/blog'>JMLOG</Link>
         </div>
-        <div className='flex gap-3'>
+        <div className='flex items-center gap-1 lg:gap-3'>
+          <SearchBar />
           <ThemeSwitch />
-          {/* <Button asChild variant='ghost' size='icon'>
-            <Link href='https://github.com/jmao5' target='_blank'>
-              <Github className='size-[1.2rem]' />
-            </Link>
-          </Button> */}
         </div>
       </div>
       <ScrollProgressBar />

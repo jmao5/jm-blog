@@ -54,7 +54,7 @@ const CategoryList = ({
           ))}
         </ul>
       </section>
-      <section className='mb-10 sm:hidden'>
+      <section className='mb-6 sm:hidden'>
         <Select onValueChange={onCategoryChange} defaultValue={currentCategory}>
           <SelectTrigger className='w-[180px]'>
             <SelectValue placeholder='Theme' />
