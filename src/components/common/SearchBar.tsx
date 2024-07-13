@@ -23,7 +23,7 @@ const SearchBar = () => {
         onBlur={() => setIsFocused(false)}
         placeholder='Search...'
         className={clsx(
-          'w-full rounded-lg border bg-gray-100 py-1.5 pl-8 pr-3 text-xs text-gray-700 sm:py-2 sm:text-sm',
+          'w-32 rounded-lg border bg-gray-100 py-1.5 pl-8 pr-3 text-xs text-gray-700 sm:w-full sm:py-2 sm:text-sm',
           'focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
           isFocused ? 'border-blue-500' : 'border-gray-300'
         )}
