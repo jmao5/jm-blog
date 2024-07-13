@@ -1,5 +1,8 @@
+// PostListPage.tsx
+import { Suspense } from 'react';
+
 import CategoryList from './CategoryList';
-import PostCard from './PostCard';
+import ClientPostList from './ClientPostList';
 import { getAllPostCount, getCategoryDetailList, getSortedPostList } from '@/lib/post';
 
 interface PostListProps {
@@ -18,13 +21,9 @@ const PostListPage = async ({ category }: PostListProps) => {
         categoryList={categoryList}
         currentCategory={category}
       />
-      <section className=''>
-        <ul className='grid grid-cols-1 gap-3 md:grid-cols-1 lg:gap-4'>
-          {postList.map((post) => (
-            <PostCard key={post.url + post.date} post={post} />
-          ))}
-        </ul>
-      </section>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ClientPostList postList={postList} />
+      </Suspense>
     </section>
   );
 };
