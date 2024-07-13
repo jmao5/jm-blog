@@ -1,4 +1,3 @@
-// layouts/Header.tsx
 'use client';
 
 import Link from 'next/link';
@@ -7,30 +6,6 @@ import ScrollProgressBar from '@/components/common/ScrollProgressBar';
 import SearchBar from '@/components/common/SearchBar';
 import { useSpyElem } from '@/hook/useSpy';
 import ThemeSwitch from '@/layouts/theme/Switch';
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
-
-// layouts/Header.tsx
 
 export const Header = () => {
   const { ref, marginTop } = useSpyElem(65);

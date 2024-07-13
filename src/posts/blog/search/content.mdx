@@ -1,0 +1,211 @@
+---
+title: 🚀 Nextjs 정적 블로그에 검색 기능 추가하기
+date: 2024-07-13
+thumbnail: /posts/blog/search/1.png
+tags: [Next.js, React, TypeScript, Zustand, Search]
+category: 기술
+---
+
+# 정적 블로그에 검색 기능 추가하기
+
+## "어디 있는 그 포스트?" - 정적 블로그에 검색 기능 더하기
+블로그를 스크롤하다 보면 분명히 썼던 포스트를 찾기 힘들 때가 있죠? 
+오늘은 Zustand를 사용한 상태 관리와 클라이언트 사이드 검색을 통해 블로그에 검색 기능을 추가해 보겠습니다.
+
+## Zustand를 설치 
+사이트를 참고하여 설치합니다.
+https://www.npmjs.com/package/zustand 
+
+```bash
+npm i zustand
+```
+
+## 검색 상태 관리하기
+먼저, Zustand를 사용하여 검색 상태를 관리하는 스토어를 만들어 보겠습니다. 
+이 스토어는 검색어와 검색 결과를 관리합니다.
+
+```typescript
+// store/searchStore.ts
+import { Post } from '@/config/types';
+import { create } from 'zustand';
+
+interface SearchStore {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  searchResults: Post[];
+  setSearchResults: (results: Post[]) => void;
+}
+
+export const useSearchStore = create<SearchStore>((set) => ({
+  searchTerm: '',
+  setSearchTerm: (term) => set({ searchTerm: term }),
+  searchResults: [],
+  setSearchResults: (results) => set({ searchResults: results }),
+}));
+```
+이 스토어는 검색어(searchTerm)와 검색 결과(searchResults)를 관리합니다.
+
+## 검색 기능 구현
+
+스토어 설정이 끝났으니, 클라이언트 컴포넌트에서 검색 기능을 구현해 보겠습니다. 
+useEffect 훅을 사용하여 검색어에 따라 포스트를 필터링해 메인화면에 보여줍니다.
+
+```tsx {14}
+'use client';
+
+import { useEffect } from 'react';
+import PostCard from './PostCard';
+import PostList from './PostList';
+import { Post } from '@/config/types';
+import { useSearchStore } from '@/store/SearchStore';
+
+interface PostListClientProps {
+  initialPostList: Post[];
+}
+
+const PostListClient = ({ initialPostList }: PostListClientProps) => {
+  const { searchTerm, searchResults, setSearchResults } = useSearchStore();
+
+  useEffect(() => {
+    if (searchTerm === '') {
+      setSearchResults([]);
+    } else {
+      const results = initialPostList.filter((post) =>
+        post.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(results);
+    }
+  }, [searchTerm, initialPostList, setSearchResults]);
+
+  const postList = searchTerm ? searchResults : initialPostList;
+  const isSearching = !!searchTerm;
+
+  return (
+    <>
+      {isSearching ? (
+        <div className='mt-4'>
+          <h2 className='mb-4 text-2xl font-bold'>검색 결과</h2>
+          {postList.length > 0 ? (
+            <ul className='grid grid-cols-1 gap-3 md:grid-cols-1 lg:gap-4'>
+              {postList.map((post) => (
+                <PostCard key={post.url + post.date} post={post} />
+              ))}
+            </ul>
+          ) : (
+            <p>조회 된 포스트가 없습니다.</p>
+          )}
+        </div>
+      ) : (
+        <PostList postList={postList} />
+      )}
+    </>
+  );
+};
+
+export default PostListClient;
+```
+이 컴포넌트는 검색어에 따라 포스트 목록을 필터링하고, 결과를 표시합니다.
+
+## SearchBar 추가
+마지막으로, 헤더에 검색 바를 추가해보겠습니다. 
+헤더와 메인에서 검색과 포스트를 보여주는 구역이 다르기 때문에, 상태관리를 전역으로 사용합니다.
+
+```tsx {9,21}
+'use client';
+
+import React, { useState } from 'react';
+
+import { useSearchStore } from '@/store/SearchStore';
+import clsx from 'clsx';
+
+const SearchBar = () => {
+  const { searchTerm, setSearchTerm } = useSearchStore();
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  return (
+    <div className={clsx('relative mx-auto w-full max-w-xs sm:max-w-sm', isFocused && 'z-10')}>
+      <input
+        type='text'
+        value={searchTerm}
+        onChange={handleChange}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        placeholder='Search...'
+        className={clsx(
+          'w-32 rounded-lg border bg-gray-100 py-1.5 pl-8 pr-3 text-xs text-gray-700 sm:w-full sm:py-2 sm:text-sm',
+          'focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500',
+          isFocused ? 'border-blue-500' : 'border-gray-300'
+        )}
+      />
+      <div className='absolute inset-y-0 left-0 flex items-center pl-2'>
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          className='h-3 w-3 text-gray-400 sm:h-4 sm:w-4'
+          fill='none'
+          viewBox='0 0 24 24'
+          stroke='currentColor'
+        >
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth='2'
+            d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+          />
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+export default SearchBar;
+```
+## Header 추가
+헤더에 검색 바를 추가합니다.
+
+```tsx {23}
+'use client';
+
+import Link from 'next/link';
+import ScrollProgressBar from '@/components/common/ScrollProgressBar';
+import SearchBar from '@/components/common/SearchBar';
+import { useSpyElem } from '@/hook/useSpy';
+import ThemeSwitch from '@/layouts/theme/Switch';
+
+export const Header = () => {
+  const { ref, marginTop } = useSpyElem(65);
+
+  return (
+    <nav
+      style={{ marginTop }}
+      ref={ref}
+      className='fixed z-40 flex w-full flex-col items-center justify-center border-b bg-background shadow-sm'
+    >
+      <div className='mt-1 flex h-[52px] w-full max-width-[1200px] items-center justify-between px-4 lg:h-[64px]'>
+        <div className='flex items-center text-lg font-medium'>
+          <Link href='/blog'>JMLOG</Link>
+        </div>
+        <div className='flex items-center gap-1 lg:gap-3'>
+          <SearchBar />
+          <ThemeSwitch />
+        </div>
+      </div>
+      <ScrollProgressBar />
+    </nav>
+  );
+}
+```
+이렇게 구현하면 사용자가 검색 바를 통해 포스트를 검색할 수 있게 됩니다.
+
+## 결론
+
+
+<Callout type="info">
+이상으로 정적 블로그에 검색 기능을 추가하는 방법에 대해 알아보았습니다. 
+Zustand를 사용한 상태 관리와 클라이언트 사이드 검색 구현을 통해 검색을 쉽게 사용합니다. 
+포스트는 서버사이드로 가져오고 검색은 클라이언트 사이드로 가져와서
+서버에 부하없이 사용 할 수 있습니다.
+</Callout>
