@@ -11,7 +11,7 @@ interface Props {
 const PostCard = ({ post }: Props) => {
   return (
     <Link href={post.url}>
-      <li className='flex h-40 flex-col gap-3 overflow-hidden rounded-md border shadow-md transition hover:shadow-xl dark:border-slate-700 dark:hover:border-white md:flex-row'>
+      <li className='flex h-full flex-col gap-3 overflow-hidden rounded-md border shadow-md transition hover:shadow-xl dark:border-slate-700 dark:hover:border-white md:h-40 md:flex-row'>
         <div className='relative aspect-video w-full rounded-t-md border-b md:aspect-auto md:w-1/4 md:rounded-l-md md:rounded-t-none md:border-b-0 md:border-r'>
           <Image
             src={post.thumbnail}
