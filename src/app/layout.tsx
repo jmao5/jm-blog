@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import { baseDomain, blogDesc, blogName, blogThumbnailURL } from '@/config/const';
 import '@/config/globals.css';
-import { SearchProvider } from '@/contexts/SearchContext';
 import { Footer } from '@/layouts/Footer';
 import { Header } from '@/layouts/Header';
 import { ThemeProvider } from '@/layouts/theme/Provider';
@@ -38,13 +37,11 @@ export default function RootLayout({
   return (
     <html lang='ko' className='h-full scroll-my-20 scroll-smooth' suppressHydrationWarning>
       <body className='flex min-h-screen flex-col font-pretendard'>
-        <SearchProvider>
-          <ThemeProvider>
-            <Header />
-            <main className='mt-[52px] flex flex-1 flex-col lg:mt-[64px]'>{children}</main>
-            <Footer />
-          </ThemeProvider>
-        </SearchProvider>
+        <ThemeProvider>
+          <Header />
+          <main className='mt-[52px] flex flex-1 flex-col lg:mt-[64px]'>{children}</main>
+          <Footer />
+        </ThemeProvider>
         <Toaster />
         <Analytics />
         <SpeedInsights />
