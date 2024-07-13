@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 
 import { CategoryButton } from './CategoryButton';
 import { CategoryDetail } from '@/config/types';
-import { ChevronDown, ChevronDownIcon } from 'lucide-react';
 
 // 아이콘 추가
 
@@ -59,9 +58,9 @@ const CategoryList = ({
         </ul>
       </section>
       <section className='mb-6 sm:hidden'>
-        <div className='relative inline-block'>
+        <div className='relative'>
           <select
-            className='w-40 appearance-none rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out focus:outline-none'
+            className='select select-bordered w-40 appearance-none rounded-lg bg-white py-3 pl-4 pr-10 text-gray-700 shadow-sm focus:outline-none'
             onChange={onCategoryChange}
             value={currentCategory}
           >
@@ -72,12 +71,9 @@ const CategoryList = ({
               </option>
             ))}
           </select>
-          <span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
-            <ChevronDown className='h-4 w-4' />
-          </span>
-          <label className='absolute -top-2 left-2 bg-white px-1 text-xs font-medium text-gray-500'>
+          <span className='absolute left-3 top-0 -translate-y-1/2 bg-white px-1 text-xs font-medium text-gray-500'>
             {getCurrentCategoryName()}
-          </label>
+          </span>
         </div>
       </section>
     </>
