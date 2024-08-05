@@ -21,11 +21,8 @@ export const metadata: Metadata = {
     images: [blogThumbnailURL],
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: blogName,
-    description: blogDesc,
-    images: [blogThumbnailURL],
+  verification: {
+    google: 'Cox37UNYt2_mqq99MgIieWMKF3aqgoH7q_74cvolYcQ',
   },
 };
 
